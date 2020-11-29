@@ -4,6 +4,7 @@ import usantatecla.tictactoe.controllers.PlayController;
 import usantatecla.tictactoe.models.Coordinate;
 import usantatecla.tictactoe.views.Message;
 import usantatecla.tictactoe.types.Error;
+import usantatecla.utils.Console;
 
 class PlayView {
 
@@ -14,7 +15,14 @@ class PlayView {
     }
 
     void interact() {
+        Console console = Console.getInstance();
         do {
+            int option;
+            do {
+                console.writeln("----- Choose one option -----");
+                console.writeln("1) Do a movement");
+                option = console.readInt("");
+            } while (option!=1);
             //this.playController.next();
             if (!this.playController.isBoardComplete()) {
                 this.put();
