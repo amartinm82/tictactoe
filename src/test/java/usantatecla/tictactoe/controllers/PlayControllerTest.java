@@ -29,6 +29,7 @@ public class PlayControllerTest {
 
     @Test
     public void testGivenAPlayControllerWhenUndoThenUndo() {
+        this.playController.undo();
         verify(this.game).undo();
     }
 }

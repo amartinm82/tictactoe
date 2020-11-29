@@ -80,6 +80,7 @@ public class Game {
 
     public void set(GameMemento memento) {
         this.turn.set(memento.getTurn().getToken().ordinal());
+        this.board = new Board();
         for (int i = 0; i < Coordinate.DIMENSION; i++) {
             for (int j = 0; j < Coordinate.DIMENSION; j++) {
                 Coordinate coordinate = new Coordinate(i, j);
