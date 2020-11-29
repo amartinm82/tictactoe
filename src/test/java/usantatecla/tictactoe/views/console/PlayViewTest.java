@@ -107,4 +107,20 @@ public class PlayViewTest {
         }
     }
 
+    @Test
+    public void testGivenNewPlayViewWhenUserPlayerShowMenuInitiallyOnlyDoAMovementOptionIsShown() {
+        try (MockedStatic console = mockStatic(Console.class)) {
+            when(this.playController.isUser()).thenReturn(true);
+            console.when(Console::getInstance).thenReturn(this.console);
+            when(this.console.readInt(anyString())).thenReturn(1, 1, 2, 2);
+            when(this.playController.put(any(Coordinate.class))).thenReturn(Error.NULL);
+            when(this.playController.isTicTacToe()).thenReturn(true);
+            when(this.playController.getToken(any(Coordinate.class))).thenReturn(Token.X);
+            when(this.playController.getToken()).thenReturn(Token.X);
+            this.playView.interact();
+            verify(this.console).writeln("----- Choose one option -----");
+            verify(this.console).writeln("1) Do a movement");
+        }
+    }
+
 }
