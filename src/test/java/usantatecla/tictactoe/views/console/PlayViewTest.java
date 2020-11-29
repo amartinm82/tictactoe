@@ -9,8 +9,8 @@ import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import usantatecla.tictactoe.controllers.PlayController;
 import usantatecla.tictactoe.models.Coordinate;
-import usantatecla.tictactoe.types.Error;
 import usantatecla.tictactoe.models.Token;
+import usantatecla.tictactoe.types.Error;
 import usantatecla.tictactoe.views.Message;
 import usantatecla.utils.Console;
 
@@ -76,7 +76,7 @@ public class PlayViewTest {
         try (MockedStatic console = mockStatic(Console.class)) {
             when(this.playController.isBoardComplete()).thenReturn(true);
             when(this.playController.isUser()).thenReturn(true);
-            when(this.console.readInt(anyString())).thenReturn(1,1, 1, 2, 2);
+            when(this.console.readInt(anyString())).thenReturn(1, 1, 1, 2, 2);
             when(this.playController.move(any(Coordinate.class), any(Coordinate.class))).thenReturn(Error.NULL);
             when(this.playController.getToken(any(Coordinate.class))).thenReturn(Token.X);
             when(this.playController.isTicTacToe()).thenReturn(true);
@@ -108,18 +108,37 @@ public class PlayViewTest {
     }
 
     @Test
-    public void testGivenNewPlayViewWhenUserPlayerShowMenuInitiallyOnlyDoAMovementOptionIsShown() {
+    public void testGivenNewPlayViewWhenUserPlayerShowMenuWithoutPreviousMovementThenOnlyDoAMovementOptionIsAllowedAndPutCoordinate() {
         try (MockedStatic console = mockStatic(Console.class)) {
             when(this.playController.isUser()).thenReturn(true);
             console.when(Console::getInstance).thenReturn(this.console);
-            when(this.console.readInt(anyString())).thenReturn(1, 1, 2);
+            when(this.console.readInt(anyString())).thenReturn(1, 1, 1);
             when(this.playController.put(any(Coordinate.class))).thenReturn(Error.NULL);
             when(this.playController.isTicTacToe()).thenReturn(true);
             when(this.playController.getToken(any(Coordinate.class))).thenReturn(Token.X);
             when(this.playController.getToken()).thenReturn(Token.X);
             this.playView.interact();
-            verify(this.console).writeln("----- Choose one option -----");
-            verify(this.console).writeln("1) Do a movement");
+            verify(this.console).writeln(Message.CHOOSE_OPTION.toString());
+            verify(this.console).writeln(Message.MOVEMENT_OPTION.toString());
+            verify(this.playController).put(new Coordinate(0, 0));
+        }
+    }
+
+    @Test
+    public void testGivenNewPlayViewWhenUserPlayerShowMenuWithPreviousMovementThenDoAMovementAndUndoOptionAreAllowedAndUndoMovement() {
+        try (MockedStatic console = mockStatic(Console.class)) {
+            when(this.playController.isUser()).thenReturn(true);
+            console.when(Console::getInstance).thenReturn(this.console);
+            when(this.console.readInt(anyString())).thenReturn(2, 1, 1, 1);
+            when(this.playController.put(any(Coordinate.class))).thenReturn(Error.NULL);
+            when(this.playController.isTicTacToe()).thenReturn(true);
+            when(this.playController.getToken(any(Coordinate.class))).thenReturn(Token.X);
+            when(this.playController.getToken()).thenReturn(Token.X);
+            this.playView.interact();
+            verify(this.console, times(2)).writeln(Message.CHOOSE_OPTION.toString());
+            verify(this.console, times(2)).writeln(Message.MOVEMENT_OPTION.toString());
+            verify(this.console).writeln(Message.UNDO_OPTION.toString());
+            verify(this.playController).undo();
         }
     }
 

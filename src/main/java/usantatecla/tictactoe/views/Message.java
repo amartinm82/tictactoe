@@ -17,7 +17,8 @@ public enum Message {
     PLAYER_WIN(" Player: You win!!! :-)"),
     RESUME("Do you want to continue"),
     CHOOSE_OPTION("----- Choose one option -----"),
-    MOVEMENT_OPTION("1) Do a movement");
+    MOVEMENT_OPTION("1) Do a movement"),
+    UNDO_OPTION("2) Undo previous movement");
 
     private String message;
 

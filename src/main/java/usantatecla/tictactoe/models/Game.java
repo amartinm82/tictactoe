@@ -62,4 +62,7 @@ public class Game {
 		return Turn.NUMBER_PLAYERS;
 	}
 
+	public void undo() {
+
+    }
 }
