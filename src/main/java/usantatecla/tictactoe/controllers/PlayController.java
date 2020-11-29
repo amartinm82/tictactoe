@@ -36,7 +36,11 @@ public class PlayController extends Controller {
     }
 
     public void undo() {
+        this.game.undo();
+    }
 
+    public boolean undoable() {
+        return this.game.undoable();
     }
 
 }

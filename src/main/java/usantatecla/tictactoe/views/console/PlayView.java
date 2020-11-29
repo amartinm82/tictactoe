@@ -26,6 +26,8 @@ class PlayView {
                 } else {
                     this.move();
                 }
+            } else if (option == 2) {
+                this.playController.undo();
             }
             new GameView(this.playController).write();
         } while (!this.playController.isTicTacToe());
@@ -36,11 +38,16 @@ class PlayView {
     private int readOption() {
         Console console = Console.getInstance();
         int option;
+        int optionsCounter = 1;
         do {
             Message.CHOOSE_OPTION.writeln();
             Message.MOVEMENT_OPTION.writeln();
+            if (this.playController.undoable()) {
+                Message.UNDO_OPTION.writeln();
+                optionsCounter++;
+            }
             option = console.readInt("");
-        } while (option != 1);
+        } while (option < 1 && option > optionsCounter);
         return option;
     }
 

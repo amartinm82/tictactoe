@@ -129,14 +129,14 @@ public class PlayViewTest {
         try (MockedStatic console = mockStatic(Console.class)) {
             when(this.playController.isUser()).thenReturn(true);
             console.when(Console::getInstance).thenReturn(this.console);
-            when(this.console.readInt(anyString())).thenReturn(2, 1, 1, 1);
-            when(this.playController.put(any(Coordinate.class))).thenReturn(Error.NULL);
+            when(this.playController.undoable()).thenReturn(true, false);
+            when(this.console.readInt(anyString())).thenReturn(2, 1, 1);
             when(this.playController.isTicTacToe()).thenReturn(true);
             when(this.playController.getToken(any(Coordinate.class))).thenReturn(Token.X);
             when(this.playController.getToken()).thenReturn(Token.X);
             this.playView.interact();
-            verify(this.console, times(2)).writeln(Message.CHOOSE_OPTION.toString());
-            verify(this.console, times(2)).writeln(Message.MOVEMENT_OPTION.toString());
+            verify(this.console).writeln(Message.CHOOSE_OPTION.toString());
+            verify(this.console).writeln(Message.MOVEMENT_OPTION.toString());
             verify(this.console).writeln(Message.UNDO_OPTION.toString());
             verify(this.playController).undo();
         }
