@@ -4,7 +4,6 @@ import usantatecla.tictactoe.controllers.PlayController;
 import usantatecla.tictactoe.models.Coordinate;
 import usantatecla.tictactoe.types.Error;
 import usantatecla.tictactoe.views.Message;
-import usantatecla.utils.Console;
 
 class PlayView {
 
@@ -16,18 +15,10 @@ class PlayView {
 
     void interact() {
         do {
-            int option = 1;
             if (playController.isUser()) {
-                option = readOption();
-            }
-            if (option == 1) {
-                if (!this.playController.isBoardComplete()) {
-                    this.put();
-                } else {
-                    this.move();
-                }
-            } else if (option == 2) {
-                this.playController.undo();
+                new PlayMenu(playController).execute();
+            } else {
+                this.randomPlay(playController);
             }
             new GameView(this.playController).write();
         } while (!this.playController.isTicTacToe());
@@ -35,55 +26,15 @@ class PlayView {
         Message.PLAYER_WIN.writeln();
     }
 
-    private int readOption() {
-        Console console = Console.getInstance();
-        int option;
-        int optionsCounter = 1;
-        do {
-            Message.CHOOSE_OPTION.writeln();
-            Message.MOVEMENT_OPTION.writeln();
-            if (this.playController.undoable()) {
-                Message.UNDO_OPTION.writeln();
-                optionsCounter++;
-            }
-            option = console.readInt("");
-        } while (option < 1 && option > optionsCounter);
-        return option;
-    }
-
-    private void put() {
-        boolean isUser = this.playController.isUser();
-        Coordinate coordinate;
+    private void randomPlay(PlayController playController) {
         Error error;
         do {
-            if (isUser) {
-                coordinate = new CoordinateView().read(Message.COORDINATE_TO_PUT.toString());
+            Coordinate target = createRandomCoordinate();
+            if (!playController.isBoardComplete()) {
+                error = playController.put(target);
             } else {
-                coordinate = createRandomCoordinate();
-            }
-            error = this.playController.put(coordinate);
-            if (isUser) {
-                new ErrorView(error).writeln();
-            }
-        } while (!error.isNull());
-    }
-
-    private void move() {
-        boolean isUser = this.playController.isUser();
-        Coordinate origin;
-        Coordinate target;
-        Error error;
-        do {
-            if (isUser) {
-                origin = new CoordinateView().read(Message.COORDINATE_TO_REMOVE.toString());
-                target = new CoordinateView().read(Message.COORDINATE_TO_MOVE.toString());
-            } else {
-                origin = createRandomCoordinate();
-                target = createRandomCoordinate();
-            }
-            error = this.playController.move(origin, target);
-            if (isUser) {
-                new ErrorView(error).writeln();
+                Coordinate origin = createRandomCoordinate();
+                error = playController.move(origin, target);
             }
         } while (!error.isNull());
     }

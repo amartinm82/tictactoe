@@ -21,6 +21,9 @@ import static org.mockito.MockitoAnnotations.openMocks;
 @ExtendWith(MockitoExtension.class)
 public class PlayViewTest {
 
+    private static final String FIRST_OPTION_INDEX = "1) ";
+    private static final String SECOND_OPTION_INDEX = "2) ";
+
     @Mock
     private PlayController playController;
 
@@ -119,7 +122,7 @@ public class PlayViewTest {
             when(this.playController.getToken()).thenReturn(Token.X);
             this.playView.interact();
             verify(this.console).writeln(Message.CHOOSE_OPTION.toString());
-            verify(this.console).writeln(Message.MOVEMENT_OPTION.toString());
+            verify(this.console).writeln(FIRST_OPTION_INDEX + Message.MOVEMENT_COMMAND.toString());
             verify(this.playController).put(new Coordinate(0, 0));
         }
     }
@@ -136,8 +139,8 @@ public class PlayViewTest {
             when(this.playController.getToken()).thenReturn(Token.X);
             this.playView.interact();
             verify(this.console).writeln(Message.CHOOSE_OPTION.toString());
-            verify(this.console).writeln(Message.MOVEMENT_OPTION.toString());
-            verify(this.console).writeln(Message.UNDO_OPTION.toString());
+            verify(this.console).writeln(FIRST_OPTION_INDEX + Message.MOVEMENT_COMMAND.toString());
+            verify(this.console).writeln(SECOND_OPTION_INDEX + Message.UNDO_COMMAND.toString());
             verify(this.playController).undo();
         }
     }
