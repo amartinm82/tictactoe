@@ -76,7 +76,7 @@ public class PlayViewTest {
         try (MockedStatic console = mockStatic(Console.class)) {
             when(this.playController.isBoardComplete()).thenReturn(true);
             when(this.playController.isUser()).thenReturn(true);
-            when(this.console.readInt(anyString())).thenReturn(1, 1, 2, 2);
+            when(this.console.readInt(anyString())).thenReturn(1,1, 1, 2, 2);
             when(this.playController.move(any(Coordinate.class), any(Coordinate.class))).thenReturn(Error.NULL);
             when(this.playController.getToken(any(Coordinate.class))).thenReturn(Token.X);
             when(this.playController.isTicTacToe()).thenReturn(true);

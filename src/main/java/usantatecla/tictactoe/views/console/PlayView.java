@@ -2,8 +2,8 @@ package usantatecla.tictactoe.views.console;
 
 import usantatecla.tictactoe.controllers.PlayController;
 import usantatecla.tictactoe.models.Coordinate;
-import usantatecla.tictactoe.views.Message;
 import usantatecla.tictactoe.types.Error;
+import usantatecla.tictactoe.views.Message;
 import usantatecla.utils.Console;
 
 class PlayView {
@@ -15,24 +15,33 @@ class PlayView {
     }
 
     void interact() {
-        Console console = Console.getInstance();
         do {
-            int option;
-            do {
-                console.writeln("----- Choose one option -----");
-                console.writeln("1) Do a movement");
-                option = console.readInt("");
-            } while (option!=1);
-            //this.playController.next();
-            if (!this.playController.isBoardComplete()) {
-                this.put();
-            } else {
-                this.move();
+            int option = 1;
+            if (playController.isUser()) {
+                option = readOption();
+            }
+            if (option == 1) {
+                if (!this.playController.isBoardComplete()) {
+                    this.put();
+                } else {
+                    this.move();
+                }
             }
             new GameView(this.playController).write();
         } while (!this.playController.isTicTacToe());
         new TokenView(this.playController.getToken()).write();
         Message.PLAYER_WIN.writeln();
+    }
+
+    private int readOption() {
+        Console console = Console.getInstance();
+        int option;
+        do {
+            Message.CHOOSE_OPTION.writeln();
+            Message.MOVEMENT_OPTION.writeln();
+            option = console.readInt("");
+        } while (option != 1);
+        return option;
     }
 
     private void put() {
